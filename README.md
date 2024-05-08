@@ -113,8 +113,8 @@ git log
 # 3. 下载子模块，应该是这个意思（等待时间较长，耐心看网络波动）
 git submodule update --init
 # 4. 安装gst-python
-sudo apt-get install -y apt-transport-https ca-certificates -y
-sudo update-ca-certificates
+apt-get install -y apt-transport-https ca-certificates -y
+update-ca-certificates
 cd 3rdparty/gstreamer/subprojects/gst-python/
 meson build
 meson configure
@@ -122,7 +122,7 @@ cd build
 ninja
 ninja install
 # 5. 编译构建
-cd deepstream_python_apps/bindings
+cd /opt/nvidia/deepstream/deepstream-6.4/sources/deepstream_python_apps/bindings
 mkdir build
 cd build
 cmake ..
@@ -133,7 +133,8 @@ python3 -m pip install --upgrade pip
 ```
 # 1.5 test
 ``` bash
-
+cd apps/deepstream-rtsp-in-rtsp-out
+python3 deepstream_test1_rtsp_in_rtsp_out.py -i 自己的rtsp://url
 ```
 
 
