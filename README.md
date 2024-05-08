@@ -40,6 +40,64 @@ nvcr.io/nvidia/deepstream:6.4-gc-triton-devel
 ```bash
 sudo sh start_deepstream.sh
 ```
+如果不将容器内的东西其他挂载出来，可以直接跳到1.3了。
+下面是将deepstream-6.4文件夹挂载出来，方便在宿主机上操作。首先将原来容器中的内容复制出来：
+``` bash
+cd ..
+mv deepstream-6.4 /file_share/
+exit
+sudo docker stop deepstream_6.4
+sudo docker rm deepstream_6.4
+mkdir docker_share
+sudo mv file_share/deepstream-6.4 docker_share/
+```
+然后重新运行容器（记得修改路径）：
+``` bash
+sudo docker run -it \
+--net=host \
+--gpus all \
+-e DISPLAY=$DISPLAY \
+--device /dev/snd \
+-v /tmp/.X11-unix/:/tmp/.X11-unix \
+-v /home/<username>/deepstream/file_share/:/file_share \
+-v /home/<username>/deepstream/docker_share/deepstream-6.4:/opt/nvidia/deepstream/deepstream-6.4 \
+--privileged=true \
+--restart unless-stopped \
+--log-opt max-size=20m \
+--log-opt max-file=1 \
+--name deepstream_6.4 \
+nvcr.io/nvidia/deepstream:6.4-gc-triton-devel
+```
+就可以重新进入容器了：`sudo docker exec -it deepstream_6.4 bash`
+### 1.3 Change the software source
+更换软件源（针对中国）
+```bash
+mv /etc/apt/sources.list /etc/apt/sources.list.bak
+vim /etc/apt/sources.list
+```
+填入以下内容（USTC的源，版本Ubuntu 22.04），参考网址：[USTC源](https://mirrors.ustc.edu.cn/help/ubuntu.html)：
+``` bash
+# 默认注释了源码仓库，如有需要可自行取消注释
+deb https://mirrors.ustc.edu.cn/ubuntu/ noble main restricted universe multiverse
+# deb-src https://mirrors.ustc.edu.cn/ubuntu/ noble main restricted universe multiverse
+deb https://mirrors.ustc.edu.cn/ubuntu/ noble-security main restricted universe multiverse
+# deb-src https://mirrors.ustc.edu.cn/ubuntu/ noble-security main restricted universe multiverse
+deb https://mirrors.ustc.edu.cn/ubuntu/ noble-updates main restricted universe multiverse
+# deb-src https://mirrors.ustc.edu.cn/ubuntu/ noble-updates main restricted universe multiverse
+deb https://mirrors.ustc.edu.cn/ubuntu/ noble-backports main restricted universe multiverse
+# deb-src https://mirrors.ustc.edu.cn/ubuntu/ noble-backports main restricted universe multiverse
+
+# 预发布软件源，不建议启用
+# deb https://mirrors.ustc.edu.cn/ubuntu/ noble-proposed main restricted universe multiverse
+# deb-src https://mirrors.ustc.edu.cn/ubuntu/ noble-proposed main restricted universe multiverse
+```
+或者从其他地方找也行。
+更新一下
+``` bash
+apt-get update
+```
+### 1.4 Download and build deepstream_python
+参考链接：https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/blob/v1.1.10/bindings/README.md
+``` 
 
 
-如果不将容器内的东西挂挂载出来。
