@@ -78,26 +78,66 @@ vim /etc/apt/sources.list
 填入以下内容（USTC的源，版本Ubuntu 22.04），参考网址：[USTC源](https://mirrors.ustc.edu.cn/help/ubuntu.html)：
 ``` bash
 # 默认注释了源码仓库，如有需要可自行取消注释
-deb https://mirrors.ustc.edu.cn/ubuntu/ noble main restricted universe multiverse
-# deb-src https://mirrors.ustc.edu.cn/ubuntu/ noble main restricted universe multiverse
-deb https://mirrors.ustc.edu.cn/ubuntu/ noble-security main restricted universe multiverse
-# deb-src https://mirrors.ustc.edu.cn/ubuntu/ noble-security main restricted universe multiverse
-deb https://mirrors.ustc.edu.cn/ubuntu/ noble-updates main restricted universe multiverse
-# deb-src https://mirrors.ustc.edu.cn/ubuntu/ noble-updates main restricted universe multiverse
-deb https://mirrors.ustc.edu.cn/ubuntu/ noble-backports main restricted universe multiverse
-# deb-src https://mirrors.ustc.edu.cn/ubuntu/ noble-backports main restricted universe multiverse
+deb https://mirrors.ustc.edu.cn/ubuntu/ jammy main restricted universe multiverse
+# deb-src https://mirrors.ustc.edu.cn/ubuntu/ jammy main restricted universe multiverse
+deb https://mirrors.ustc.edu.cn/ubuntu/ jammy-security main restricted universe multiverse
+# deb-src https://mirrors.ustc.edu.cn/ubuntu/ jammy-security main restricted universe multiverse
+deb https://mirrors.ustc.edu.cn/ubuntu/ jammy-updates main restricted universe multiverse
+# deb-src https://mirrors.ustc.edu.cn/ubuntu/ jammy-updates main restricted universe multiverse
+deb https://mirrors.ustc.edu.cn/ubuntu/ jammy-backports main restricted universe multiverse
+# deb-src https://mirrors.ustc.edu.cn/ubuntu/ jammy-backports main restricted universe multiverse
 
 # 预发布软件源，不建议启用
-# deb https://mirrors.ustc.edu.cn/ubuntu/ noble-proposed main restricted universe multiverse
-# deb-src https://mirrors.ustc.edu.cn/ubuntu/ noble-proposed main restricted universe multiverse
+# deb https://mirrors.ustc.edu.cn/ubuntu/ jammy-proposed main restricted universe multiverse
+# deb-src https://mirrors.ustc.edu.cn/ubuntu/ jammy-proposed main restricted universe multiverse
 ```
 或者从其他地方找也行。
 更新一下
 ``` bash
 apt-get update
+apt-get upgrade
 ```
 ### 1.4 Download and build deepstream_python
 参考链接：https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/blob/v1.1.10/bindings/README.md
-``` 
+```  bash
+# 1. 基础环境配置：
+apt install python3-gi python3-dev python3-gst-1.0 python-gi-dev git meson \
+    python3 python3-pip python3.10-dev cmake g++ build-essential libglib2.0-dev \
+    libglib2.0-dev-bin libgstreamer1.0-dev libtool m4 autoconf automake libgirepository1.0-dev libcairo2-dev
+# 2. 转到sources文件夹，拉取代码，并转到6.4版本：
+cd sources
+git clone https://github.com/NVIDIA-AI-IOT/deepstream_python_apps
+cd deepstream_python_apps
+git checkout v1.1.10
+git log
+# 3. 下载子模块，应该是这个意思（等待时间较长，耐心看网络波动）
+git submodule update --init
+# 4. 安装gst-python
+sudo apt-get install -y apt-transport-https ca-certificates -y
+sudo update-ca-certificates
+cd 3rdparty/gstreamer/subprojects/gst-python/
+meson build
+meson configure
+cd build
+ninja
+ninja install
+# 5. 编译构建
+cd deepstream_python_apps/bindings
+mkdir build
+cd build
+cmake ..
+make -j$(nproc)
+# 6. wheel
+pip3 install ./pyds-1.1.10-py3-none*.whl
+python3 -m pip install --upgrade pip
+```
+# 1.5 test
+``` bash
+
+```
+
+
+
+
 
 
