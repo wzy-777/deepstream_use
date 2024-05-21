@@ -35,3 +35,9 @@ python3 export_yoloV5.py -w yolov5s.pt --dynamic -s 640
 ```
 要注意，哪里运行engine文件，哪里生成engine文件！
 小细节：好像fp16反而需要更大的workspace。
+### 5 use and run
+推理配置文件直接使用Deepstream-yolo中的config_infer_primary_yoloV5.txt即可，其中`custom-lib-path`要替换成上面得到的链接库，如：
+```bash
+custom-lib-path=/opt/nvidia/deepstream/deepstream-6.4/sources/DeepStream-Yolo/nvdsinfer_custom_impl_Yolo/libnvdsinfer_custom_impl_Yolo.so
+```
+
