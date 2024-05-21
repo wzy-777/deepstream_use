@@ -24,6 +24,7 @@ pip3 install onnx onnxsim onnxruntime
 cp ../../DeepStream-Yolo/utils/export_yoloV5.py ./
 ```
 ### 3 pt2onnx
+根据需要，将自己的pt模型转为onnx模型
 ```bash
 python3 export_yoloV5.py -w yolov5s.pt --dynamic -s 640
 ```
