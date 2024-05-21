@@ -24,7 +24,14 @@ pip3 install onnx onnxsim onnxruntime
 cp ../../DeepStream-Yolo/utils/export_yoloV5.py ./
 ```
 ### 3 pt2onnx
-根据需要，将自己的pt模型转为onnx模型
+根据需要，将自己的pt模型转为onnx模型，生成的文件在当前文件夹下
 ```bash
 python3 export_yoloV5.py -w yolov5s.pt --dynamic -s 640
 ```
+### 4 onnx2engine
+可以再将onnx模型转为engine，示例如下：
+```bash
+/usr/src/tensorrt/bin/trtexec --onnx=yolov5.onnx --saveEngine=yolov5.engine --fp16 --workspace=2048
+```
+要注意，哪里运行engine文件，哪里生成engine文件！
+小细节：好像fp16反而需要更大的workspace。
