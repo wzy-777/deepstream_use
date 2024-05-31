@@ -20,7 +20,7 @@ mkdir -p deepstream/file_share
 cd deepstream
 vim start_deepstream.sh
 ```
-填入以下内容、修改家目录中的`username`：
+填入以下内容、修改家目录中的`username`(注意，这里环境变量DISPLAY可能不生效，下面会说)：
 ```bash
 docker run -it \
 --net=host \
