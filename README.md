@@ -36,6 +36,7 @@ docker run -it \
 --name deepstream_6.4 \
 nvcr.io/nvidia/deepstream:6.4-gc-triton-devel
 ```
+（这里可以在容器创建之后，在宿主机上echo $DISPLAY查看，然后使用export DISPLAY=xxx，去手动指定，或者我推荐，直接在创建的时候就制定具体的）
 运行：
 ```bash
 sudo sh start_deepstream.sh
