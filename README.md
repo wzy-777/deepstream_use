@@ -135,6 +135,8 @@ python3 -m pip install --upgrade pip
 ``` bash
 cd apps/deepstream-rtsp-in-rtsp-out
 python3 deepstream_test1_rtsp_in_rtsp_out.py -i 自己的rtsp://url
+apt insatall xarclock
+xarclock
 ```
 
 
